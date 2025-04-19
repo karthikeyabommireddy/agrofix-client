@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+# 🥕 Agrofix - Bulk Vegetable & Fruit Order Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Agrofix is a full-stack web application that allows buyers to place bulk orders for fresh vegetables and fruits, while providing an admin dashboard to manage inventory and track orders efficiently.
 
-## Available Scripts
+🚀 **Live Demo**: (https://agrofix-client.vercel.app/)
 
-In the project directory, you can run:
+## 📌 Features
 
-### `npm start`
+### 🛍️ Buyer Features
+- Browse fresh vegetable and fruit products
+- Place bulk orders with quantity selection
+- Track order status using Order ID
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🧑‍💼 Admin Features
+- Secure admin login
+- View and manage all orders (Pending, Processing, Delivered)
+- Add, edit, and delete products from the catalog
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🧱 Tech Stack
 
-### `npm test`
+- **Frontend**: React.js, Styled Components, Axios  
+- **Backend**: Node.js, Express.js  
+- **Database**: PostgreSQL (hosted on Neon or Railway)  
+- **ORM**: Prisma  
+- **Hosting**: Vercel (Frontend) + Railway/Render (Backend)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠️ Local Setup Instructions
 
-### `npm run build`
+1. **Clone the Repo**  
+   git clone https://github.com/your-username/agrofix-client.git  
+   cd agrofix-client
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Install Dependencies**  
+   npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Create `.env` File**  
+   Inside the root of the `client` folder, add:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   REACT_APP_API_URL=https://your-backend-url.onrender.com
 
-### `npm run eject`
+4. **Run Locally**  
+   npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔐 Admin Credentials
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Username: admin  
+Password: admin123
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+> These credentials are hardcoded for demo/demo evaluation purposes.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📂 Folder Structure
 
-## Learn More
+client/  
+├── src/  
+│   ├── components/  
+│   ├── pages/  
+│   ├── ProductList.js  
+│   ├── OrderForm.js  
+│   └── ...  
+├── public/  
+│   └── index.html  
+├── package.json  
+└── README.md
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ✨ Screenshots
+![Screenshot 2025-04-20 033130](https://github.com/user-attachments/assets/f33c6c66-41bc-4ff4-ab87-886e6bf16986)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![Screenshot 2025-04-20 033147](https://github.com/user-attachments/assets/17a0d76a-2646-4ede-b5cc-3dbe6b99e63c)
 
-### Code Splitting
+![Screenshot 2025-04-20 033202](https://github.com/user-attachments/assets/d9f3ef0f-b43c-4037-b63c-ce402a8a8232)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![Screenshot 2025-04-20 033216](https://github.com/user-attachments/assets/4bcf3893-edd5-4599-a1ce-9ba50975a73c)
 
-### Analyzing the Bundle Size
+![Screenshot 2025-04-20 033227](https://github.com/user-attachments/assets/c4e7b183-4076-4475-abf2-b6b0314dd72d)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![Screenshot 2025-04-20 033245](https://github.com/user-attachments/assets/88cfc3de-4243-4316-902c-4a4be49027de)
 
-### Making a Progressive Web App
+![Screenshot 2025-04-20 033254](https://github.com/user-attachments/assets/c8c9e4de-e23c-458a-ab0d-3c735996f16b)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![Screenshot 2025-04-20 033310](https://github.com/user-attachments/assets/a3fb03d7-a647-4dec-94b4-5fd66c7a52f8)
 
-### Advanced Configuration
+## 💬 Feedback
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+If you have any suggestions or feedback, feel free to raise an issue or contact me on LinkedIn(https://www.linkedin.com/in/karthikeya-reddy-bommireddy/).
 
-### Deployment
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is for educational and internship evaluation purposes.
