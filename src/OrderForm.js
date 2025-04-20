@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { supabase } from "./supabaseClient"; 
+import { supabase } from "./supabaseClient";
+ 
 
 const OrderForm = () => {
   const [products, setProducts] = useState([]);
@@ -50,20 +51,47 @@ const OrderForm = () => {
 
   const handlePlaceOrder = async () => {
     const items = selectedItems.map((item) => ({
-      product: item.name, // ✅ match database format
+      product: item.product,
       quantity: item.quantity,
     }));
-
+  
     try {
-      const res = await axios.post("https://backend-repo-production-44b8.up.railway.app/orders", {
-        ...form,
-        items,
-      });
-      setOrderId(res.data.id);
+      // Step 1: Insert into `orders` table
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .insert([
+          {
+            buyer_name: form.buyer_name,
+            contact: form.contact,
+            address: form.address,
+          },
+        ])
+        .select()
+        .single();
+  
+      if (orderError) throw orderError;
+  
+      // Step 2: Insert each item into `order_items` table with order_id
+      const orderItems = items.map((item) => ({
+        order_id: orderData.id,
+        product: item.product,
+        quantity: item.quantity,
+      }));
+  
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItems);
+  
+      if (itemsError) throw itemsError;
+  
+      // Clear form after success
+      setOrderId(orderData.id);
       setSelectedItems([]);
       setForm({ buyer_name: "", contact: "", address: "" });
+  
+      alert("Order placed successfully!");
     } catch (err) {
-      console.error("Error placing order:", err);
+      console.error("Error placing order with Supabase:", err);
       alert("Order failed");
     }
   };
