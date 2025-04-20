@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { supabase } from "./supabaseClient"; 
 
 const OrderForm = () => {
   const [products, setProducts] = useState([]);
@@ -13,10 +14,17 @@ const OrderForm = () => {
   const [orderId, setOrderId] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://backend-repo-production-44b8.up.railway.app/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("Product").select("*");
+  
+      if (error) {
+        console.error("Error fetching products:", error.message);
+      } else {
+        setProducts(data);
+      }
+    };
+  
+    fetchProducts();
   }, []);
 
   const handleAddToCart = (product) => {

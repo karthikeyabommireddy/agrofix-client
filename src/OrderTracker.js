@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import { supabase } from "./supabaseClient"; 
 
 const OrderTracker = () => {
   const [orderId, setOrderId] = useState("");
@@ -10,17 +11,22 @@ const OrderTracker = () => {
   const fetchOrder = () => {
     if (!orderId) return;
 
-    axios
-      .get(`https://backend-repo-production-44b8.up.railway.app/orders/${orderId}`)
-      .then((res) => {
-        setOrder(res.data);
-        setError("");
-      })
-      .catch((err) => {
-        console.error("Error:", err);
+    const fetchOrder = async () => {
+      const { data, error } = await supabase
+        .from("Order")
+        .select("*")
+        .eq("id", orderId)
+        .single(); // ensures we get a single object, not an array
+    
+      if (error) {
+        console.error("Error:", error.message);
         setOrder(null);
         setError("Order not found");
-      });
+      } else {
+        setOrder(data);
+        setError("");
+      }
+    };
   };
 
   return (

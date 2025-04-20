@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled, { keyframes } from "styled-components";
+import { supabase } from "./supabaseClient";
 
 const ProductManager = () => {
   const [products, setProducts] = useState([]);
@@ -15,42 +16,59 @@ const ProductManager = () => {
     fetchProducts();
   }, []);
 
-  const fetchProducts = () => {
-    axios.get("https://backend-repo-production-44b8.up.railway.app/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Fetch error:", err));
-  };
-  
-  const handleAddOrUpdate = async () => {
-    try {
-      if (form.id) {
-        await axios.put(`https://backend-repo-production-44b8.up.railway.app/products/${form.id}`, {
+
+
+// ✅ Fetch all products
+const fetchProducts = async () => {
+  const { data, error } = await supabase.from("Product").select("*");
+  if (error) {
+    console.error("Fetch error:", error.message);
+  } else {
+    setProducts(data);
+  }
+};
+
+// ✅ Add or Update product
+const handleAddOrUpdate = async () => {
+  try {
+    if (form.id) {
+      const { error } = await supabase
+        .from("Product")
+        .update({
           name: form.name,
           price: parseFloat(form.price),
           category: form.category,
-        });
-      } else {
-        await axios.post("https://backend-repo-production-44b8.up.railway.app/products", {
+        })
+        .eq("id", form.id);
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.from("Product").insert([
+        {
           name: form.name,
           price: parseFloat(form.price),
           category: form.category,
-        });
-      }
-      setForm({ id: null, name: "", price: "", category: "" });
-      fetchProducts();
-    } catch (err) {
-      console.error("Save error:", err);
+        },
+      ]);
+      if (error) throw error;
     }
-  };
-  
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`https://backend-repo-production-44b8.up.railway.app/products/${id}`);
-      fetchProducts();
-    } catch (err) {
-      console.error("Delete error:", err);
-    }
-  };
+
+    setForm({ id: null, name: "", price: "", category: "" });
+    fetchProducts();
+  } catch (err) {
+    console.error("Save error:", err.message || err);
+  }
+};
+
+// ✅ Delete product
+const handleDelete = async (id) => {
+  const { error } = await supabase.from("Product").delete().eq("id", id);
+  if (error) {
+    console.error("Delete error:", error.message);
+  } else {
+    fetchProducts();
+  }
+};
+
   
 
   const handleEditClick = (product) => {

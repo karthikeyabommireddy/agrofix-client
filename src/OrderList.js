@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled, { keyframes } from "styled-components";
+import { supabase } from "./supabaseClient";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -9,23 +10,30 @@ const OrderList = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = () => {
-    axios
-      .get("https://backend-repo-production-44b8.up.railway.app/orders")
-      .then((res) => setOrders(res.data))
-      .catch((err) => console.error("Error fetching orders:", err));
+  const fetchOrders = async () => {
+    const { data, error } = await supabase.from("Order").select("*");
+  
+    if (error) {
+      console.error("Error fetching orders:", error.message);
+    } else {
+      setOrders(data);
+    }
   };
-
+  
   const handleStatusChange = async (id, status) => {
-    try {
-      await axios.put(`https://backend-repo-production-44b8.up.railway.app/orders/${id}`, { status });
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === id ? { ...order, status } : order
-      )
-    );
-    } catch (err) {
-      console.error("Error updating status:", err);
+    const { error } = await supabase
+      .from("Order")
+      .update({ status })
+      .eq("id", id);
+  
+    if (error) {
+      console.error("Error updating status:", error.message);
+    } else {
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === id ? { ...order, status } : order
+        )
+      );
     }
   };
 

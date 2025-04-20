@@ -7,7 +7,7 @@ import { CartProvider } from './context/CartContext'; // ✅ NEW
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    <CartProvider> {/* ✅ Wrap App inside this */}
+    <CartProvider>
       <App />
     </CartProvider>
   </BrowserRouter>

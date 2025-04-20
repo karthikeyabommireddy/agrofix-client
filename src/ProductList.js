@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductListCard from "./ProductListCard";
 import styled from "styled-components";
+import { supabase } from './supabaseClient';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("https://backend-repo-production-44b8.up.railway.app/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from('Product').select('*');
+      if (error) {
+        console.error("Error fetching products:", error);
+      } else {
+        setProducts(data);
+      }
+    };
+  
+    fetchProducts();
   }, []);
   
 
