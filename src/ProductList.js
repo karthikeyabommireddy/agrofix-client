@@ -8,10 +8,11 @@ const ProductList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://backend-repo-production-44b8.up.railway.app/products")
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
+  
 
   const handleAddToCart = (product) => {
     alert(`"${product.name}" added to cart!`);

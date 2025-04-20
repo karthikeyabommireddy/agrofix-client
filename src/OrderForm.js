@@ -14,7 +14,7 @@ const OrderForm = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://backend-repo-production-44b8.up.railway.app/products")
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
@@ -47,7 +47,7 @@ const OrderForm = () => {
     }));
 
     try {
-      const res = await axios.post("http://localhost:5000/orders", {
+      const res = await axios.post("https://backend-repo-production-44b8.up.railway.app/orders", {
         ...form,
         items,
       });

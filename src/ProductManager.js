@@ -16,21 +16,21 @@ const ProductManager = () => {
   }, []);
 
   const fetchProducts = () => {
-    axios.get("http://localhost:5000/products")
+    axios.get("https://backend-repo-production-44b8.up.railway.app/products")
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Fetch error:", err));
   };
-
+  
   const handleAddOrUpdate = async () => {
     try {
       if (form.id) {
-        await axios.put(`http://localhost:5000/products/${form.id}`, {
+        await axios.put(`https://backend-repo-production-44b8.up.railway.app/products/${form.id}`, {
           name: form.name,
           price: parseFloat(form.price),
           category: form.category,
         });
       } else {
-        await axios.post("http://localhost:5000/products", {
+        await axios.post("https://backend-repo-production-44b8.up.railway.app/products", {
           name: form.name,
           price: parseFloat(form.price),
           category: form.category,
@@ -42,15 +42,16 @@ const ProductManager = () => {
       console.error("Save error:", err);
     }
   };
-
+  
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/products/${id}`);
+      await axios.delete(`https://backend-repo-production-44b8.up.railway.app/products/${id}`);
       fetchProducts();
     } catch (err) {
       console.error("Delete error:", err);
     }
   };
+  
 
   const handleEditClick = (product) => {
     setForm({

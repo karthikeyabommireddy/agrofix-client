@@ -11,19 +11,19 @@ const OrderList = () => {
 
   const fetchOrders = () => {
     axios
-      .get("http://localhost:5000/orders")
+      .get("https://backend-repo-production-44b8.up.railway.app/orders")
       .then((res) => setOrders(res.data))
       .catch((err) => console.error("Error fetching orders:", err));
   };
 
   const handleStatusChange = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/orders/${id}`, { status });
-      setOrders((prev) =>
-        prev.map((order) =>
-          order.id === id ? { ...order, status } : order
-        )
-      );
+      await axios.put(`https://backend-repo-production-44b8.up.railway.app/orders/${id}`, { status });
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === id ? { ...order, status } : order
+      )
+    );
     } catch (err) {
       console.error("Error updating status:", err);
     }

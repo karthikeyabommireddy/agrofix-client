@@ -11,7 +11,7 @@ const OrderTracker = () => {
     if (!orderId) return;
 
     axios
-      .get(`http://localhost:5000/orders/${orderId}`)
+      .get(`https://backend-repo-production-44b8.up.railway.app/orders/${orderId}`)
       .then((res) => {
         setOrder(res.data);
         setError("");
