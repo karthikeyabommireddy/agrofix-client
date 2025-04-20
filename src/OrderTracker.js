@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { supabase } from "./supabaseClient"; 
 
@@ -8,25 +7,23 @@ const OrderTracker = () => {
   const [order, setOrder] = useState(null);
   const [error, setError] = useState("");
 
-  const fetchOrder = () => {
+  const fetchOrder = async () => {
     if (!orderId) return;
 
-    const fetchOrder = async () => {
-      const { data, error } = await supabase
-        .from("Order")
-        .select("*")
-        .eq("id", orderId)
-        .single(); // ensures we get a single object, not an array
-    
-      if (error) {
-        console.error("Error:", error.message);
-        setOrder(null);
-        setError("Order not found");
-      } else {
-        setOrder(data);
-        setError("");
-      }
-    };
+    const { data, error } = await supabase
+      .from("Order")
+      .select("*")
+      .eq("id", orderId)
+      .single(); // Ensures one result
+
+    if (error) {
+      console.error("Error:", error.message);
+      setOrder(null);
+      setError("Order not found");
+    } else {
+      setOrder(data);
+      setError("");
+    }
   };
 
   return (
@@ -46,28 +43,31 @@ const OrderTracker = () => {
       {order && (
         <CardWrapper>
           <div className="card">
-          <div className="card-content">
-  <h3 className="order-id">Order #{order.id}</h3>
+            <div className="card-content">
+              <h3 className="order-id">Order #{order.id}</h3>
 
-  <div className="info">
-    <p><span>👤 Name:</span> {order.buyer_name}</p>
-    <p><span>📞 Contact:</span> {order.contact}</p>
-    <p><span>📍 Address:</span> {order.address}</p>
-    <p><span>📦 Status:</span> <strong className={`status ${order.status.toLowerCase()}`}>{order.status}</strong></p>
-  </div>
+              <div className="info">
+                <p><span>👤 Name:</span> {order.buyer_name}</p>
+                <p><span>📞 Contact:</span> {order.contact}</p>
+                <p><span>📍 Address:</span> {order.address}</p>
+                <p><span>📦 Status:</span> 
+                  <strong className={`status ${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </strong>
+                </p>
+              </div>
 
-  <div className="items">
-    <p>🛒 <strong>Items Ordered:</strong></p>
-    <ul>
-      {order.items.map((item, i) => (
-        <li key={i}>
-          <span className="dot">•</span> {item.product} × {item.quantity}
-        </li>
-      ))}
-    </ul>
-  </div>
-</div>
-
+              <div className="items">
+                <p>🛒 <strong>Items Ordered:</strong></p>
+                <ul>
+                  {order.items.map((item, i) => (
+                    <li key={i}>
+                      <span className="dot">•</span> {item.name} × {item.quantity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </CardWrapper>
       )}
@@ -76,7 +76,6 @@ const OrderTracker = () => {
 };
 
 export default OrderTracker;
-
 
 
 const Wrapper = styled.div`
@@ -129,79 +128,6 @@ const CardWrapper = styled.div`
   display: flex;
   justify-content: center;
 
-  .card-content {
-  z-index: 1;
-  position: relative;
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-  padding: 5px;
-}
-
-.order-id {
-  color: #00ffff;
-  font-weight: bold;
-  margin-bottom: 10px;
-  font-size: 20px;
-}
-
-.info p {
-  margin: 5px 0;
-  font-size: 15px;
-  color: #e0f7fa;
-}
-
-.info span {
-  color: #80deea;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.status {
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.status.pending {
-  background-color: #ffb74d;
-  color: black;
-}
-
-.status.processing {
-  background-color: #ffeb3b;
-  color: black;
-}
-
-.status.delivered {
-  background-color: #81c784;
-  color: black;
-}
-
-.items p {
-  margin-top: 10px;
-  margin-bottom: 5px;
-  color: #fff;
-  font-weight: bold;
-}
-
-ul {
-  padding-left: 20px;
-  list-style: none;
-}
-
-li {
-  font-size: 14px;
-  color: #f1f1f1;
-  margin: 4px 0;
-  display: flex;
-  align-items: center;
-}
-
-li .dot {
-  margin-right: 8px;
-  color: #00bcd4;
-}
-
   .card {
     width: 320px;
     background: #07182E;
@@ -210,12 +136,6 @@ li .dot {
     overflow: hidden;
     padding: 25px;
     color: white;
-  }
-
-  .card-content {
-    z-index: 1;
-    position: relative;
-    text-align: left;
   }
 
   .card::before {
@@ -242,14 +162,76 @@ li .dot {
     to { transform: rotate(360deg); }
   }
 
+  .card-content {
+    z-index: 1;
+    position: relative;
+    text-align: left;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 5px;
+  }
+
+  .order-id {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  .info p {
+    margin: 5px 0;
+    font-size: 15px;
+    color: #e0f7fa;
+  }
+
+  .info span {
+    color: #80deea;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .status {
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .status.pending {
+    background-color: #ffb74d;
+    color: black;
+  }
+
+  .status.processing {
+    background-color: #ffeb3b;
+    color: black;
+  }
+
+  .status.delivered {
+    background-color: #81c784;
+    color: black;
+  }
+
+  .items p {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: bold;
+  }
+
   ul {
-    margin-top: 8px;
     padding-left: 20px;
-    list-style: disc;
+    list-style: none;
   }
 
   li {
     font-size: 14px;
-    margin: 3px 0;
+    color: #f1f1f1;
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  li .dot {
+    margin-right: 8px;
+    color: #00bcd4;
   }
 `;

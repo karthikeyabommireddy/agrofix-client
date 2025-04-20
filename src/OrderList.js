@@ -3,6 +3,16 @@ import axios from "axios";
 import styled, { keyframes } from "styled-components";
 import { supabase } from "./supabaseClient";
 
+
+
+
+
+
+
+
+
+
+
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
@@ -76,7 +86,7 @@ const OrderList = () => {
                     <ul style={{ paddingLeft: "15px", margin: 0 }}>
                       {parsedItems.map((item, i) => (
                         <li key={i}>
-                          {item.product} × {item.quantity}
+                          {item.name} × {item.quantity}
                         </li>
                       ))}
                     </ul>
@@ -88,9 +98,9 @@ const OrderList = () => {
                         handleStatusChange(order.id, e.target.value)
                       }
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="Processing">Processing</option>
-                      <option value="Delivered">Delivered</option>
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="delivered">Delivered</option>
                     </select>
                   </td>
                 </tr>
@@ -105,12 +115,38 @@ const OrderList = () => {
   return (
     <Wrapper>
       <h2>Manage Orders</h2>
-      {renderOrders("Pending", "#e67e22")}
-      {renderOrders("Processing", "#f39c12")}
-      {renderOrders("Delivered", "#27ae60")}
+      {renderOrders("pending", "#e67e22")}
+      {renderOrders("processing", "#f39c12")}
+      {renderOrders("delivered", "#27ae60")}
     </Wrapper>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default OrderList;
 

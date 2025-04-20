@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { supabase } from "./supabaseClient";
- 
 
 const OrderForm = () => {
   const [products, setProducts] = useState([]);
@@ -17,14 +16,12 @@ const OrderForm = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("Product").select("*");
-  
       if (error) {
         console.error("Error fetching products:", error.message);
       } else {
         setProducts(data);
       }
     };
-  
     fetchProducts();
   }, []);
 
@@ -49,52 +46,47 @@ const OrderForm = () => {
     setSelectedItems(selectedItems.filter((item) => item.id !== id));
   };
 
+
+
+
+
+
   const handlePlaceOrder = async () => {
-    const items = selectedItems.map((item) => ({
-      product: item.product,
-      quantity: item.quantity,
-    }));
-  
     try {
-      // Step 1: Insert into `orders` table
+      // Prepare the full order object
+      const orderPayload = {
+        buyer_name: form.buyer_name,
+        contact: form.contact,
+        address: form.address,
+        items: selectedItems, // items will be stored as JSONB in Supabase
+        status: "pending",
+      };
+  
+      // Insert full order in one step
       const { data: orderData, error: orderError } = await supabase
-        .from("orders")
-        .insert([
-          {
-            buyer_name: form.buyer_name,
-            contact: form.contact,
-            address: form.address,
-          },
-        ])
+        .from("Order")
+        .insert([orderPayload])
         .select()
         .single();
   
       if (orderError) throw orderError;
   
-      // Step 2: Insert each item into `order_items` table with order_id
-      const orderItems = items.map((item) => ({
-        order_id: orderData.id,
-        product: item.product,
-        quantity: item.quantity,
-      }));
-  
-      const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(orderItems);
-  
-      if (itemsError) throw itemsError;
-  
-      // Clear form after success
+      // Clear form and UI
       setOrderId(orderData.id);
       setSelectedItems([]);
       setForm({ buyer_name: "", contact: "", address: "" });
   
       alert("Order placed successfully!");
     } catch (err) {
-      console.error("Error placing order with Supabase:", err);
+      console.error("Error placing order:", err);
       alert("Order failed");
     }
   };
+  
+
+
+
+
 
   return (
     <Wrapper>
@@ -140,7 +132,9 @@ const OrderForm = () => {
                 type="number"
                 value={item.quantity}
                 min="1"
-                onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                onChange={(e) =>
+                  handleQuantityChange(item.id, e.target.value)
+                }
               />
               <button onClick={() => handleRemoveItem(item.id)}>❌</button>
             </div>
@@ -154,8 +148,7 @@ const OrderForm = () => {
 
       {orderId && (
         <p className="success-msg">
-          ✅ Order placed successfully! Your Order ID:{" "}
-          <strong>{orderId}</strong>
+          ✅ Order placed successfully! Your Order ID: <strong>{orderId}</strong>
         </p>
       )}
     </Wrapper>
